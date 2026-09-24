@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "epic-pic"
+version = "2.0.0"
+description = "Vectorized 1D/2D/3D Particle-In-Cell (PIC) Plasma Physics Suite"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [
+    {name = "Avinash Kumar Himanshu", email = "avinash@example.com"}
+]
+keywords = [
+    "plasma-physics",
+    "particle-in-cell",
+    "pic",
+    "boris-pusher",
+    "two-stream-instability",
+    "landau-damping",
+    "magnetic-reconnection",
+    "computational-astrophysics"
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License"
+]
+dependencies = [
+    "numpy>=1.22.0",
+    "scipy>=1.8.0",
+    "matplotlib>=3.5.0",
+    "tqdm>=4.64.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "numba>=0.56.0"
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
