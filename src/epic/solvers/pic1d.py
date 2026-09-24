@@ -159,19 +159,8 @@ class PIC1DSolver:
         self.history["max_E"].append(float(np.max(np.abs(self.E))))
 
     def step(self):
-        """Advance the simulation by one time step dt (Drift-Scatter-Push)."""
-        # 1. Drift positions by dt using velocities v^{n-1/2}
-        for sp in self.species:
-            sp.pos += sp.vel[:, 0:1] * self.dt
-            sp.pos = np.mod(sp.pos, self.boxsize)
-
-        self.time += self.dt
-        self.step_count += 1
-
-        # 2. Scatter: deposit charge and solve fields at t^{n}
-        self._solve_fields()
-
-        # 3. Push: advance velocities from v^{n-1/2} to v^{n+1/2}
+        """Advance the simulation by one time step dt (Kick-Sync-Drift-Field)."""
+        # 1. Kick: advance velocities from v^{n-1/2} to v^{n+1/2} using current fields E^n
         for sp in self.species:
             sp.vel_prev = sp.vel.copy()
 
@@ -185,7 +174,19 @@ class PIC1DSolver:
                 sp.vel, E_vec, self.B_ext, sp.q, sp.m, self.dt
             )
 
+        # 2. Record synchronized diagnostics at integer time n
         self._record_diagnostics(is_initial=False)
+
+        # 3. Drift: advance positions by dt using velocities v^{n+1/2}
+        for sp in self.species:
+            sp.pos += sp.vel[:, 0:1] * self.dt
+            sp.pos = np.mod(sp.pos, self.boxsize)
+
+        self.time += self.dt
+        self.step_count += 1
+
+        # 4. Field solve at t^{n+1}
+        self._solve_fields()
 
     def run(
         self,

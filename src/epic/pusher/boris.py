@@ -102,4 +102,4 @@ def retard_velocity(
     v(t = -dt/2) so that the standard leapfrog cycle (drift pos by dt, push vel by dt)
     remains strictly second-order accurate.
     """
-    return boris_push(v_0, E_0, B_0, q, m, dt=-dt)
+    return boris_push(v_0, E_0, B_0, q, m, dt=-0.5 * dt)

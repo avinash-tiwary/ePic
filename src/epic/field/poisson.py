@@ -207,9 +207,9 @@ def solve_poisson_3d_fft(
     Ey_hat = -1j * diff_ky * phi_hat
     Ez_hat = -1j * diff_kz * phi_hat
 
-    phi = np.fft.irfftn(phi_hat, s=(Nz, Ny, Nx))
-    Ex = np.fft.irfftn(Ex_hat, s=(Nz, Ny, Nx))
-    Ey = np.fft.irfftn(Ey_hat, s=(Nz, Ny, Nx))
-    Ez = np.fft.irfftn(Ez_hat, s=(Nz, Ny, Nx))
+    phi = np.fft.irfftn(phi_hat, s=(Nz, Ny, Nx), axes=(0, 1, 2))
+    Ex = np.fft.irfftn(Ex_hat, s=(Nz, Ny, Nx), axes=(0, 1, 2))
+    Ey = np.fft.irfftn(Ey_hat, s=(Nz, Ny, Nx), axes=(0, 1, 2))
+    Ez = np.fft.irfftn(Ez_hat, s=(Nz, Ny, Nx), axes=(0, 1, 2))
 
     return phi, Ex, Ey, Ez

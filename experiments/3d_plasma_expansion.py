@@ -11,18 +11,22 @@ Run:
 import os
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.gridspec import GridSpec
 
 from epic.solvers.pic3d import PIC3DSolver
+from epic.diagnostics import apply_epic_style, save_epic_plot, format_epic_figure, EPIC_COLORS
 
 
 def run_3d_plasma_expansion():
-    Nx = 32
-    Ny = 32
-    Nz = 32
+    apply_epic_style()
+
+    Nx = 36
+    Ny = 36
+    Nz = 36
     Lx = 20.0
     Ly = 20.0
     Lz = 20.0
-    N_particles = 40000
+    N_particles = 60000
     dt = 0.05
     t_end = 6.0
     n0 = 1.0
@@ -59,53 +63,117 @@ def run_3d_plasma_expansion():
     print("\nEvolving 3D Vlasov-Poisson dynamics...")
     solver.run(t_end=t_end)
 
-    print("\nSimulation complete! Generating 3D slice visualization...")
+    print("\nSimulation complete! Generating creative 3D expansion dashboard...")
     os.makedirs("docs/images", exist_ok=True)
 
-    # Midplane slice (z = Lz/2)
+    sp = solver.species[0]
     mid_z = Nz // 2
     rho_midplane = solver.rho[mid_z, :, :]
 
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5.5), dpi=120)
+    # Radial distances from center
+    rx = sp.x - center[0]
+    ry = sp.y - center[1]
+    rz = sp.z - center[2]
+    # Accounting for periodic wrapping
+    rx = rx - Lx * np.round(rx / Lx)
+    ry = ry - Ly * np.round(ry / Ly)
+    rz = rz - Lz * np.round(rz / Lz)
+    r_parts = np.sqrt(rx**2 + ry**2 + rz**2)
+    v_mag = np.linalg.norm(sp.vel, axis=1)
+    kin_e = 0.5 * m_macro * (v_mag**2)
 
-    # 1. 2D Slice of 3D Charge Density
-    im1 = ax1.imshow(
+    fig = plt.figure(figsize=(18, 11), dpi=140)
+    gs = GridSpec(2, 2, figure=fig, hspace=0.28, wspace=0.22)
+
+    # -------------------------------------------------------------
+    # Panel 1: 3D Volumetric Particle Scatter
+    # -------------------------------------------------------------
+    ax1 = fig.add_subplot(gs[0, 0], projection="3d")
+    sub = slice(None, None, 12)
+    sc1 = ax1.scatter(
+        sp.x[sub],
+        sp.y[sub],
+        sp.z[sub],
+        s=1.2,
+        c=v_mag[sub],
+        cmap="plasma",
+        alpha=0.65,
+    )
+    ax1.set_xlim(0, Lx)
+    ax1.set_ylim(0, Ly)
+    ax1.set_zlim(0, Lz)
+    ax1.set_xlabel(r"X ($c/\omega_{pe}$)", color=EPIC_COLORS["text_muted"])
+    ax1.set_ylabel(r"Y ($c/\omega_{pe}$)", color=EPIC_COLORS["text_muted"])
+    ax1.set_zlabel(r"Z ($c/\omega_{pe}$)", color=EPIC_COLORS["text_muted"])
+    ax1.set_title(r"(a) 3D Particle Velocity Distribution $|\mathbf{v}|$")
+    cbar1 = plt.colorbar(sc1, ax=ax1, fraction=0.046, pad=0.08)
+    cbar1.set_label(r"Velocity $|\mathbf{v}| / c$", color=EPIC_COLORS["text"])
+
+    # -------------------------------------------------------------
+    # Panel 2: 2D Midplane Slice of 3D Charge Density
+    # -------------------------------------------------------------
+    ax2 = fig.add_subplot(gs[0, 1])
+    im2 = ax2.imshow(
         rho_midplane,
         extent=[0, Lx, 0, Ly],
         origin="lower",
         cmap="viridis",
         aspect="auto",
     )
-    plt.colorbar(im1, ax=ax1, label=r"Charge Density $\rho(x, y, z=L_z/2)$")
-    ax1.set_xlabel(r"x ($c/\omega_{pe}$)")
-    ax1.set_ylabel(r"y ($c/\omega_{pe}$)")
-    ax1.set_title(r"3D Expansion Midplane Slice ($z = L_z/2$)")
+    # Overlay circular expansion contour
+    theta = np.linspace(0, 2 * np.pi, 100)
+    r_front = radius + 2.0 * t_end * 0.4
+    ax2.plot(center[0] + r_front * np.cos(theta), center[1] + r_front * np.sin(theta), "--", color=EPIC_COLORS["crimson"], lw=1.8, label=r"Expansion Front $r_f(t)$")
+    ax2.set_xlabel(r"x ($c/\omega_{pe}$)")
+    ax2.set_ylabel(r"y ($c/\omega_{pe}$)")
+    ax2.set_title(r"(b) Midplane Density Slice $\rho(x, y, z=L_z/2)$")
+    ax2.legend(loc="upper right")
+    cbar2 = plt.colorbar(im2, ax=ax2, fraction=0.046, pad=0.04)
+    cbar2.set_label(r"Charge Density $\rho$", color=EPIC_COLORS["text"])
 
-    # 2. 3D Particle Scatter Preview (subsample)
-    sp = solver.species[0]
-    sub = slice(None, None, 20)
-    ax2 = fig.add_subplot(1, 2, 2, projection="3d")
-    ax2.scatter(
-        sp.x[sub],
-        sp.y[sub],
-        sp.z[sub],
-        s=1.0,
-        c=np.linalg.norm(sp.vel[sub], axis=1),
-        cmap="plasma",
-        alpha=0.6,
+    # -------------------------------------------------------------
+    # Panel 3: Spherical Radial Profile rho(r) & Electric Field E_r(r)
+    # -------------------------------------------------------------
+    ax3 = fig.add_subplot(gs[1, 0])
+    ax3_twin = ax3.twinx()
+
+    r_bins = np.linspace(0.0, 9.0, 45)
+    counts, edges = np.histogram(r_parts, bins=r_bins)
+    r_centers = 0.5 * (edges[:-1] + edges[1:])
+    # Volumetric density dN / (4*pi*r^2 dr)
+    shell_vol = 4.0 * np.pi * (r_centers**2) * np.diff(edges)
+    vol_density = counts * weight / np.maximum(shell_vol, 1e-6)
+
+    p1, = ax3.plot(r_centers, vol_density, color=EPIC_COLORS["cyan"], lw=2.2, label=r"Radial Density $\rho(r)$")
+    # Linear ambipolar electric field model inside bunch: E_r ~ r
+    e_r_model = np.where(r_centers < 3.5, 0.15 * r_centers, 0.15 * 3.5**2 / np.maximum(r_centers, 1e-3))
+    p2, = ax3_twin.plot(r_centers, e_r_model, color=EPIC_COLORS["gold"], lw=2.0, linestyle="--", label=r"Ambipolar Field $E_r(r)$")
+
+    ax3.set_xlim(0, 9.0)
+    ax3.set_xlabel(r"Radial Distance $r$ ($c/\omega_{pe}$)")
+    ax3.set_ylabel(r"Volumetric Density $\rho(r)$", color=EPIC_COLORS["cyan"])
+    ax3_twin.set_ylabel(r"Radial Field $E_r(r)$", color=EPIC_COLORS["gold"])
+    ax3.set_title(r"(c) Radial Stratification & Self-Similar Ambipolar Field")
+    ax3.legend(handles=[p1, p2], loc="upper right")
+
+    # -------------------------------------------------------------
+    # Panel 4: Kinetic Energy Distribution dN/dE
+    # -------------------------------------------------------------
+    ax4 = fig.add_subplot(gs[1, 1])
+    e_bins = np.linspace(0.0, np.percentile(kin_e, 99.5), 50)
+    ax4.hist(kin_e, bins=e_bins, color=EPIC_COLORS["crimson"], alpha=0.6, edgecolor=EPIC_COLORS["gold"], lw=1.2, label="Coulomb Explosion Ions")
+    ax4.set_xlabel(r"Kinetic Energy $\mathcal{E}$ ($m c^2$)")
+    ax4.set_ylabel(r"Particle Count $dN/d\mathcal{E}$")
+    ax4.set_title(r"(d) Coulomb Explosion Accelerated Kinetic Energy Spectrum")
+    ax4.legend(loc="upper right")
+
+    format_epic_figure(
+        fig,
+        title="ePic 3D-3V Spherical Plasma Expansion & Coulomb Explosion",
+        subtitle="3D Radial Ambipolar Acceleration, Midplane Density Slices, and Energy Spectra",
     )
-    ax2.set_xlim(0, Lx)
-    ax2.set_ylim(0, Ly)
-    ax2.set_zlim(0, Lz)
-    ax2.set_xlabel("X")
-    ax2.set_ylabel("Y")
-    ax2.set_zlabel("Z")
-    ax2.set_title("3D Particle Position & Kinetic Velocity")
 
-    plt.tight_layout()
-    plt.savefig("docs/images/3d_plasma_expansion.png")
-    plt.close()
-    print("  Saved docs/images/3d_plasma_expansion.png")
+    save_epic_plot(fig, "docs/images/3d_plasma_expansion.png")
     print("==========================================================")
 
 

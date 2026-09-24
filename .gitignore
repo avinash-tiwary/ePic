@@ -43,6 +43,7 @@ ENV/
 output/
 scratch/
 !docs/images/*
+!docs/animations/*
 
 # macOS
 .DS_Store
