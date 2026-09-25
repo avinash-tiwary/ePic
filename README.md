@@ -54,15 +54,18 @@ All movies are rendered directly from kinetic particle coordinates using the uni
 
 Every dashboard adheres to the strict **ePic Unified Visual Standard** (`src/epic/diagnostics/style.py`): cosmic obsidian canvas (`#080c14`), twilight navy axes (`#0d1322`), glowing plasma colormaps, and crisp typography.
 
-### 1. 1D-3V Two-Stream Instability
+### 1. 1D-3V Two-Stream Instability & BGK Soliton Roll-Up
 Simulates counter-streaming electron beams ($v = \pm 3.0\,v_{th}$), capturing linear exponential growth, nonlinear harmonic cascades, and exact energy conservation.
 
 | (a) Phase-Space Vortex Roll-Up | (b) Energy Partition & Modal Cascades |
 | :---: | :---: |
 | ![Two-Stream Phase Space](docs/images/two_stream_phase_space.png) | ![Two-Stream Energy](docs/images/two_stream_energy.png) |
 
-- **Linear Growth Validation**: Measured numerical growth rate $\gamma \approx 0.181\,\omega_{pe}$ agrees with warm-beam linear dispersion theory.
-- **Symplectic Conservation**: Relative total energy drift $\Delta E / E_0 = 7.5 \times 10^{-5}$ ($< 0.008\%$) over 500 timesteps.
+- **👁️ What You Are Looking At**:
+  - **Left Figure (Phase Space $(x, v_x)$)**: Shows electrons at 4 consecutive time snapshots ($t=0, 15, 25, 45\,\omega_{pe}^{-1}$). The horizontal axis is space ($x$), and the vertical axis is velocity ($v_x$). The blue (+v) and red (-v) streams interpenetrate, roll up into macroscopic rotating whirlpools (BGK solitary wave vortices), and undergo phase mixing.
+  - **Right Figure (Diagnostics)**: Panel (a) proves exact leapfrog energy conservation ($\Delta E/E_0 < 0.008\%$). Panel (b) reveals the exponential growth of wave electric field matching linear theory ($\gamma \approx 0.181\,\omega_{pe}$). Panel (c) decomposes spatial Fourier harmonics $m=1, 2, 3, 4$. Panel (d) shows the velocity distribution $f(v)$ flattening into a thermalized plateau.
+- **🧠 The Physics**: Demonstrates collisionless thermalization in Vlasov plasmas without physical collisions (coarse-grained entropy generation).
+- **💻 Run Experiment**: `python experiments/1d_two_stream.py`
 
 ---
 
@@ -73,9 +76,13 @@ Langmuir wave damping without physical collisions via resonant wave-particle pha
   <img src="docs/images/landau_damping.png" width="90%" alt="Landau Damping Dashboard" />
 </p>
 
-- **Analytic Rate**:
-  $$\gamma_L = -\sqrt{\frac{\pi}{8}}\frac{\omega_{pe}}{(k\lambda_D)^3} \exp\left(-\frac{1}{2(k\lambda_D)^2} - \frac{3}{2}\right) \approx -0.1514\,\omega_{pe}$$
-- The measured peak electric field envelope $|E|_{\max}(t)$ follows the analytic linear Landau decay rate down to the kinetic thermal noise floor.
+- **👁️ What You Are Looking At**:
+  - **Panel (a)**: Semi-log plot of the peak electric field $|E|_{\max}(t)$. The blue curve oscillates at the Bohm-Gross frequency ($\omega_r = 1.323\,\omega_{pe}$) while decaying exponentially along the red dashed analytic envelope ($\gamma_L = -0.1514\,\omega_{pe}$).
+  - **Panel (b)**: Microscopic phase-space distribution showing the resonant phase velocity line $v_\phi = \omega/k \approx 2.65\,v_{th}$ (yellow dashed line) where electrons absorb wave energy.
+  - **Panel (c)**: Waveform snapshots in real space $E(x, t)$ showing spatial wave packet attenuation.
+  - **Panel (d)**: Exponential decay of electrostatic field energy at the $2\gamma_L$ rate.
+- **🧠 The Physics**: Proves that collisionless damping is reversible phase mixing rather than thermodynamic dissipation (Landau, 1946).
+- **💻 Run Experiment**: `python experiments/1d_landau_damping.py`
 
 ---
 
@@ -86,6 +93,14 @@ When the wave amplitude is large ($\alpha = 0.45$), resonant electrons become tr
   <img src="docs/images/nonlinear_landau_trapping.png" width="90%" alt="Nonlinear Landau Trapping" />
 </p>
 
+- **👁️ What You Are Looking At**:
+  - **Panel (a)**: Electric field $|E|_{\max}(t)$ stops damping after $t \sim 10\,\omega_{pe}^{-1}$ and instead exhibits periodic bounce oscillations at the O'Neil period $\tau_B = 2\pi / \sqrt{e k E_0 / m}$.
+  - **Panel (b)**: Phase-space swirl showing trapped electrons circulating inside closed orbits within the wave's potential trough.
+  - **Panel (c)**: Self-consistent electrostatic potential well $\phi(x)$ (green) and electric field $E(x)$ (gold) confining the trapped bunch.
+  - **Panel (d)**: Reversible energy sloshing between wave field energy and particle kinetic energy.
+- **🧠 The Physics**: Verifies O'Neil's 1965 kinetic theory of nonlinear saturation and particle trapping.
+- **💻 Run Experiment**: `python experiments/1d_nonlinear_landau.py`
+
 ---
 
 ### 4. 1D-3V Bump-on-Tail Quasilinear Relaxation
@@ -94,6 +109,14 @@ A gentle high-energy electron beam ($v_b = 4.5\,v_{th}$) excites waves via inver
 <p align="center">
   <img src="docs/images/bump_on_tail_plateau.png" width="90%" alt="Bump on Tail Plateau" />
 </p>
+
+- **👁️ What You Are Looking At**:
+  - **Panel (a)**: Evolution of the velocity distribution function $f(v)$ across 4 epochs ($t=0, 15, 30, 60\,\omega_{pe}^{-1}$). Notice the initial positive slope bump ($\partial f/\partial v > 0$) flattening into an exact horizontal plateau ($\partial f/\partial v = 0$).
+  - **Panel (b)**: Kinetic phase-space trapping island at $v \approx 4.5\,v_{th}$.
+  - **Panel (c)**: Wave field energy growth via inverse Landau damping ($\gamma > 0$) and its saturation once the plateau is reached.
+  - **Panel (d)**: Exact balance between kinetic energy lost by the drifting beam and field energy gained by the plasma wave.
+- **🧠 The Physics**: First-principles validation of quasilinear diffusion theory in turbulent plasmas.
+- **💻 Run Experiment**: `python experiments/1d_bump_on_tail.py`
 
 ---
 
@@ -105,6 +128,14 @@ $$\omega^2(k) = \omega_{pe}^2 + 3 k^2 v_{th}^2$$
   <img src="docs/images/plasma_dispersion_relation.png" width="90%" alt="Plasma Dispersion Relation" />
 </p>
 
+- **👁️ What You Are Looking At**:
+  - **Panel (a)**: 2D Fourier power spectrum $\log_{10}|\tilde{E}(k, \omega)|^2$ in wavenumber ($k$) vs frequency ($\omega$) space. The glowing bright ridge follows the theoretical cyan Bohm-Gross curve with cutoff at the plasma frequency $\omega = \omega_{pe}$.
+  - **Panel (b)**: Hovmöller space-time diagram $E(x, t)$ showing individual wave phase fronts propagating through the plasma.
+  - **Panel (c)**: Frequency slices at specific $k$ modes confirming sharp resonant power peaks at $\omega(k)$.
+  - **Panel (d)**: Superluminal phase velocity $v_\phi = \omega/k > c$ alongside subluminal group velocity $v_g \le v_{th}$.
+- **🧠 The Physics**: Demonstrates that ePic faithfully resolves collective plasma eigenmodes directly out of microscopic particle noise.
+- **💻 Run Experiment**: `python experiments/1d_plasma_dispersion.py`
+
 ---
 
 ### 6. 1D-3V Collisionless Electrostatic Shock Wave
@@ -114,6 +145,14 @@ Supersonic collision ($M = 2.0$) of two plasma slabs generates an electrostatic 
   <img src="docs/images/electrostatic_shock_dynamics.png" width="90%" alt="Electrostatic Shock Wave" />
 </p>
 
+- **👁️ What You Are Looking At**:
+  - **Panel (a)**: Ion phase space $(x, v_i)$. Incoming supersonic ions (blue) hit the shock ramp at $x=30$ and are reflected backwards (red points), forming the upstream "shock foot".
+  - **Panel (b)**: Self-consistent electrostatic potential jump $\Delta \phi(x)$ (green) and localized electric field ramp $E_x(x)$ (gold) that acts as the barrier reflecting ions.
+  - **Panel (c)**: Electron phase-space vortices and downstream thermal heating.
+  - **Panel (d)**: Time evolution showing the rapid growth and steady-state saturation of the shock barrier.
+- **🧠 The Physics**: Models collisionless shock formation in astrophysical supernova remnants and laser-driven fusion (Forslund & Freidberg 1971).
+- **💻 Run Experiment**: `python experiments/1d_electrostatic_shock.py`
+
 ---
 
 ### 7. 2D-3V Beam Filamentation & Spatial Current Channels
@@ -122,6 +161,14 @@ Resolves 2D transverse filamentation (Weibel-type clustering) and oblique wave c
 <p align="center">
   <img src="docs/images/2d_filamentation.png" width="90%" alt="2D Filamentation Instability" />
 </p>
+
+- **👁️ What You Are Looking At**:
+  - **Panel (a)**: 2D plasma density $\rho(x, y)$ in glowing electric heatmap, showing spatial self-organization into longitudinal current filaments.
+  - **Panel (b)**: 2D Spatial Fourier spectrum $|\tilde{\rho}(k_x, k_y)|^2$ highlighting the dominant transverse wavevectors $k_\perp \sim \omega_{pe}/c$.
+  - **Panel (c)**: 2D phase-space projection $(x, v_x)$ revealing vortex coalescence.
+  - **Panel (d)**: Energy partition and linear instability growth rate.
+- **🧠 The Physics**: Demonstrates spontaneous magnetic field and current filament generation in astrophysical relativistic shocks.
+- **💻 Run Experiment**: `python experiments/2d_two_stream.py`
 
 ---
 
@@ -133,6 +180,14 @@ $$\mathbf{B}(y) = B_0 \tanh\left(\frac{y - y_c}{L_p}\right) \hat{\mathbf{x}} + \
   <img src="docs/images/harris_reconnection.png" width="90%" alt="Harris Sheet Reconnection" />
 </p>
 
+- **👁️ What You Are Looking At**:
+  - **Panel (a)**: Magnetic field streamlines (white) overlaid on out-of-plane current density $J_z = (\nabla \times \mathbf{B})_z$ in diverging blue/red colormap. The central X-point is marked by a red cross; magnetic islands (O-points / plasmoids) form at the boundaries.
+  - **Panel (b)**: In-plane self-consistent electric field magnitude $|\mathbf{E}_\perp|$ and quiver vectors.
+  - **Panel (c)**: Kinetic electron density $\rho(x, y)$ pinching inside the reconnecting sheet.
+  - **Panel (d)**: Particle kinetic energy spectrum $E \cdot dN/dE$ showing non-thermal power-law acceleration ($dN/dE \propto E^{-3.2}$).
+- **🧠 The Physics**: Direct kinetic benchmark of magnetic reconnection and plasmoid-driven energy conversion.
+- **💻 Run Experiment**: `python experiments/2d_harris_reconnection.py`
+
 ---
 
 ### 9. 2D-3V Asymmetric Dayside Magnetopause Reconnection
@@ -142,9 +197,14 @@ Directly models the astrophysical space plasma regime investigated in the author
   <img src="docs/images/asymmetric_reconnection_dashboard.png" width="90%" alt="Asymmetric Dayside Reconnection" />
 </p>
 
-- **Asymmetric Boundary Layer**: Magnetosphere ($B_1=1.0, n_1=0.6$) vs Magnetosheath ($B_2=0.5, n_2=2.0$).
-- **Decoupled Nulls**: Magnetic $X$-point and hydrodynamic flow stagnation point drift apart spatially.
-- **Non-Thermal Power-Law Acceleration**: Clear power-law spectrum $dN/dE \propto E^{-3.2}$ of electrons escaping along the magnetic separatrix.
+- **👁️ What You Are Looking At**:
+  - **Panel (a)**: Asymmetric magnetic topology separating the high-field/low-density **Magnetosphere** (top, $B_1=1.0, n_1=0.6$) from the low-field/high-density **Magnetosheath** (bottom, $B_2=0.5, n_2=2.0$).
+  - **Crucial Feature**: The **Magnetic X-Point** (red cross) and the **Flow Stagnation Point** (cyan circle) are **decoupled and spatially offset**, directly verifying the Cassak-Shay (2007) asymmetric scaling!
+  - **Panel (b)**: Asymmetric Hall quadrupole magnetic field $B_z / B_0$ distorted by density and field gradients.
+  - **Panel (c)**: Stratified plasma density across the dayside boundary layer.
+  - **Panel (d)**: Non-thermal electron acceleration tail escaping along the magnetic separatrix.
+- **🧠 The Physics**: Directly validates the author's IIT Indore Master's thesis research (*"Characterising Magnetic Reconnection in Asymmetric Medium"*).
+- **💻 Run Experiment**: `python experiments/2d_asymmetric_reconnection.py`
 
 ---
 
@@ -154,6 +214,14 @@ Directly models the astrophysical space plasma regime investigated in the author
 <p align="center">
   <img src="docs/images/3d_plasma_expansion.png" width="90%" alt="3D Spherical Plasma Expansion" />
 </p>
+
+- **👁️ What You Are Looking At**:
+  - **Panel (a)**: 3D volumetric scatter of kinetic particles colored by velocity magnitude $|\mathbf{v}|$.
+  - **Panel (b)**: Midplane slice $\rho(x, y, z=L_z/2)$ showing the radial expansion contour $r_f(t)$.
+  - **Panel (c)**: Spherical radial density profile $\rho(r)$ and radial ambipolar electric field $E_r(r)$ accelerating the outer ions.
+  - **Panel (d)**: Kinetic energy spectrum of the Coulomb explosion accelerated ions.
+- **🧠 The Physics**: Models laser-cluster Coulomb explosion and collisionless plasma expansion into space vacuum.
+- **💻 Run Experiment**: `python experiments/3d_plasma_expansion.py`
 
 ---
 
