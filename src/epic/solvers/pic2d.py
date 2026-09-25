@@ -150,6 +150,7 @@ class PIC2DSolver:
 
             # Synchronized velocity at integer time n: v^n = 0.5 * (v^{n-1/2} + v^{n+1/2})
             v_n = 0.5 * (sp.vel_half + v_next)
+            sp.vel = v_n.copy()
             e_kin_total += compute_kinetic_energy(v_n, sp.m)
 
             # 2. Position drift: x^n -> x^{n+1}

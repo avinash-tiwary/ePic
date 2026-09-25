@@ -100,8 +100,8 @@ def run_plasma_dispersion():
     os.makedirs("docs/images", exist_ok=True)
 
     plt.style.use("dark_background")
-    fig = plt.figure(figsize=(18, 11), dpi=140, facecolor="#090d16")
-    gs = GridSpec(2, 2, figure=fig, hspace=0.28, wspace=0.22)
+    fig = plt.figure(figsize=(18, 11), dpi=140, facecolor=EPIC_COLORS["bg_dark"])
+    gs = GridSpec(2, 2, figure=fig, hspace=0.34, wspace=0.28)
 
     # -------------------------------------------------------------
     # Panel 1: The (k, omega) Kinetic Dispersion Diagram
@@ -133,7 +133,7 @@ def run_plasma_dispersion():
     ax1.set_title(r"(a) 2D Kinetic Spectral Power $\log_{10} |\tilde{E}(k, \omega)|^2$", fontsize=13, fontweight="bold", color="#f8fafc")
     ax1.legend(loc="upper left", framealpha=0.6, facecolor="#1e293b", edgecolor="none")
     cbar1 = plt.colorbar(im1, ax=ax1, fraction=0.046, pad=0.04)
-    cbar1.set_label(r"Spectral Energy Density $\log_{10} |\tilde{E}|^2$", color="#f8fafc")
+    cbar1.set_label(r"Spectral Energy Density $\log_{10} |\tilde{E}|^2$", color="#f8fafc", labelpad=8)
 
     # -------------------------------------------------------------
     # Panel 2: Hovmoller Space-Time Diagram E(x, t)
@@ -156,7 +156,7 @@ def run_plasma_dispersion():
     ax2.set_ylabel(r"Time $t$ ($\omega_{pe}^{-1}$)", fontsize=11, color="#f8fafc")
     ax2.set_title(r"(b) Hovmöller Wavefield Diagram $E(x, t)$", fontsize=13, fontweight="bold", color="#f8fafc")
     cbar2 = plt.colorbar(im2, ax=ax2, fraction=0.046, pad=0.04)
-    cbar2.set_label(r"Electric Field $E_x(x, t)$", color="#f8fafc")
+    cbar2.set_label(r"Electric Field $E_x(x, t)$", color="#f8fafc", labelpad=8)
 
     # -------------------------------------------------------------
     # Panel 3: Spectral Power Slices at Specific k-modes

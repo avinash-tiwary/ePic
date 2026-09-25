@@ -80,8 +80,8 @@ def run_2d_two_stream():
     ky_axis = np.fft.fftshift(np.fft.fftfreq(Ny, d=solver.dy)) * 2.0 * np.pi
 
     plt.style.use("dark_background")
-    fig = plt.figure(figsize=(18, 11), dpi=140, facecolor="#090d16")
-    gs = GridSpec(2, 2, figure=fig, hspace=0.28, wspace=0.22)
+    fig = plt.figure(figsize=(18, 11), dpi=140, facecolor=EPIC_COLORS["bg_dark"])
+    gs = GridSpec(2, 2, figure=fig, hspace=0.34, wspace=0.28)
 
     # -------------------------------------------------------------
     # Panel 1: 2D Plasma Density Filaments rho(x, y)
@@ -98,7 +98,7 @@ def run_2d_two_stream():
     ax1.set_ylabel(r"Transverse Coordinate $y$ ($c/\omega_{pe}$)", fontsize=11, color="#f8fafc")
     ax1.set_title(r"(a) 2D Transverse Charge Filaments $\rho(x, y)$", fontsize=13, fontweight="bold", color="#f8fafc")
     cbar1 = plt.colorbar(im1, ax=ax1, fraction=0.046, pad=0.04)
-    cbar1.set_label(r"Charge Density $\rho(x, y)$", color="#f8fafc")
+    cbar1.set_label(r"Charge Density $\rho(x, y)$", color="#f8fafc", labelpad=8)
 
     # -------------------------------------------------------------
     # Panel 2: 2D Spatial Fourier Power Spectrum |rho(kx, ky)|^2
@@ -117,7 +117,7 @@ def run_2d_two_stream():
     ax2.set_ylabel(r"Transverse Wavenumber $k_y$ ($\omega_{pe}/c$)", fontsize=11, color="#f8fafc")
     ax2.set_title(r"(b) 2D Spatial Fourier Spectrum $\log_{10} |\tilde{\rho}(k_x, k_y)|^2$", fontsize=13, fontweight="bold", color="#f8fafc")
     cbar2 = plt.colorbar(im2, ax=ax2, fraction=0.046, pad=0.04)
-    cbar2.set_label(r"Spectral Power $\log_{10} |\tilde{\rho}|^2$", color="#f8fafc")
+    cbar2.set_label(r"Spectral Power $\log_{10} |\tilde{\rho}|^2$", color="#f8fafc", labelpad=8)
 
     # -------------------------------------------------------------
     # Panel 3: Phase Space Projection (x vs vx)

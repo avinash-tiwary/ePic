@@ -123,6 +123,8 @@ def run_two_stream_instability():
         fig,
         title="ePic 1D-3V Two-Stream Kinetic Phase-Space Vortex Roll-Up",
         subtitle="Nonlinear BGK Solitary Wave Coalescence and Phase Mixing",
+        hspace=0.32,
+        wspace=0.24,
     )
     save_epic_plot(fig, "docs/images/two_stream_phase_space.png")
 
@@ -134,8 +136,8 @@ def run_two_stream_instability():
     e_field = np.array(solver.history["E_field"])
     e_tot = np.array(solver.history["E_total"])
 
-    fig = plt.figure(figsize=(18, 11), dpi=140, facecolor="#090d16")
-    gs = GridSpec(2, 2, figure=fig, hspace=0.28, wspace=0.22)
+    fig = plt.figure(figsize=(18, 11), dpi=140, facecolor=EPIC_COLORS["bg_dark"])
+    gs = GridSpec(2, 2, figure=fig, hspace=0.34, wspace=0.26)
 
     # Panel 1: Energy Partition & Exact Second-Order Conservation
     ax1 = fig.add_subplot(gs[0, 0], facecolor="#090d16")

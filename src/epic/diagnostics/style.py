@@ -42,16 +42,18 @@ def apply_epic_style():
         "axes.linewidth": 1.2,
         "axes.labelcolor": EPIC_COLORS["text"],
         "axes.labelsize": 11,
+        "axes.labelpad": 8,
         "axes.titlesize": 13,
         "axes.titleweight": "bold",
         "axes.titlecolor": EPIC_COLORS["text"],
+        "axes.titlepad": 10,
         "axes.grid": True,
 
         # Grid styling
         "grid.color": EPIC_COLORS["grid"],
         "grid.linestyle": "--",
         "grid.linewidth": 0.8,
-        "grid.alpha": 0.5,
+        "grid.alpha": 0.45,
 
         # Ticks styling
         "xtick.color": EPIC_COLORS["text_muted"],
@@ -66,11 +68,15 @@ def apply_epic_style():
         "text.color": EPIC_COLORS["text"],
 
         # Legend styling
-        "legend.facecolor": EPIC_COLORS["legend_bg"],
+        "legend.facecolor": "#0d1527",
         "legend.edgecolor": EPIC_COLORS["spine"],
-        "legend.fontsize": 10,
+        "legend.fontsize": 9.5,
         "legend.framealpha": 0.85,
         "legend.labelcolor": EPIC_COLORS["text"],
+        "legend.borderpad": 0.4,
+        "legend.labelspacing": 0.35,
+        "legend.handlelength": 1.6,
+        "legend.handletextpad": 0.5,
 
         # Lines and scatter
         "lines.linewidth": 2.0,
@@ -85,21 +91,64 @@ def format_epic_figure(
     fig,
     title: Optional[str] = None,
     subtitle: Optional[str] = None,
-    top_margin: float = 0.94,
+    top_margin: Optional[float] = None,
+    bottom_margin: float = 0.08,
+    left_margin: float = 0.07,
+    right_margin: float = 0.95,
+    wspace: Optional[float] = None,
+    hspace: Optional[float] = None,
 ):
-    """Add unified titles and ensure consistent figure padding."""
+    """Add unified titles with generous clearance and ensure consistent figure padding."""
     if title:
-        full_title = title
         if subtitle:
-            full_title = f"{title}\n{subtitle}"
-        fig.suptitle(
-            full_title,
-            fontsize=15,
-            fontweight="bold",
-            color=EPIC_COLORS["text"],
-            y=0.98,
-        )
-    fig.subplots_adjust(top=top_margin)
+            fig.text(
+                0.5,
+                0.970,
+                title,
+                ha="center",
+                va="top",
+                fontsize=15,
+                fontweight="bold",
+                color=EPIC_COLORS["text"],
+            )
+            fig.text(
+                0.5,
+                0.935,
+                subtitle,
+                ha="center",
+                va="top",
+                fontsize=11,
+                fontweight="normal",
+                color=EPIC_COLORS["text_muted"],
+            )
+            actual_top = 0.88 if top_margin is None else top_margin
+        else:
+            fig.text(
+                0.5,
+                0.965,
+                title,
+                ha="center",
+                va="top",
+                fontsize=15,
+                fontweight="bold",
+                color=EPIC_COLORS["text"],
+            )
+            actual_top = 0.91 if top_margin is None else top_margin
+    else:
+        actual_top = 0.93 if top_margin is None else top_margin
+
+    adjust_kwargs = {
+        "top": actual_top,
+        "bottom": bottom_margin,
+        "left": left_margin,
+        "right": right_margin,
+    }
+    if wspace is not None:
+        adjust_kwargs["wspace"] = wspace
+    if hspace is not None:
+        adjust_kwargs["hspace"] = hspace
+
+    fig.subplots_adjust(**adjust_kwargs)
 
 
 def save_epic_plot(fig, output_path: str):
@@ -110,6 +159,7 @@ def save_epic_plot(fig, output_path: str):
         facecolor=EPIC_COLORS["bg_dark"],
         edgecolor="none",
         bbox_inches="tight",
+        pad_inches=0.25,
         dpi=140,
     )
     plt.close(fig)

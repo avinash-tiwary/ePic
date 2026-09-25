@@ -142,8 +142,8 @@ def run_electrostatic_shock():
     grid_x = np.linspace(0.0, boxsize, Nx)
 
     plt.style.use("dark_background")
-    fig = plt.figure(figsize=(18, 11), dpi=140, facecolor="#090d16")
-    gs = GridSpec(2, 2, figure=fig, hspace=0.28, wspace=0.22)
+    fig = plt.figure(figsize=(18, 11), dpi=140, facecolor=EPIC_COLORS["bg_dark"])
+    gs = GridSpec(2, 2, figure=fig, hspace=0.34, wspace=0.28)
 
     # -------------------------------------------------------------
     # Panel 1: Ion Phase Space Showing Shock Ramp & Reflected Foot
@@ -181,7 +181,7 @@ def run_electrostatic_shock():
     ax2_twin.set_ylabel(r"Shock Ramp Electric Field $E_x$", fontsize=11, color="#fbbf24")
     ax2.set_title(r"(b) Electrostatic Shock Barrier $\Delta \phi$ & Electric Field Ramp", fontsize=13, fontweight="bold", color="#f8fafc")
     ax2.grid(True, linestyle="--", alpha=0.25, color="#475569")
-    ax2.legend(handles=[p1, p2], loc="upper right", framealpha=0.6, facecolor="#1e293b", edgecolor="none")
+    ax2.legend(handles=[p1, p2], loc="upper left", framealpha=0.6, facecolor="#1e293b", edgecolor="none")
 
     # -------------------------------------------------------------
     # Panel 3: Electron Phase Space & Downstream Thermalization
@@ -202,11 +202,13 @@ def run_electrostatic_shock():
     ax4 = fig.add_subplot(gs[1, 1], facecolor="#090d16")
     ax4.plot(time_hist, potential_jump_hist, color="#06b6d4", lw=2.2, label=r"Potential Jump $\Delta \phi(t)$")
     ax4.plot(time_hist, max_e_hist, color="#f43f5e", lw=2.0, linestyle="--", label=r"Peak Shock Field $|E_{max}|(t)$")
+    ax4.set_xlim(0, max(time_hist))
+    ax4.set_ylim(-0.5, 8.5)
     ax4.set_xlabel(r"Time ($\omega_{pe} t$)", fontsize=11, color="#f8fafc")
     ax4.set_ylabel(r"Shock Amplitude", fontsize=11, color="#f8fafc")
     ax4.set_title(r"(d) Shock Ramp Growth & Steady-State Saturation", fontsize=13, fontweight="bold", color="#f8fafc")
     ax4.grid(True, linestyle="--", alpha=0.25, color="#475569")
-    ax4.legend(loc="lower right", framealpha=0.6, facecolor="#1e293b", edgecolor="none")
+    ax4.legend(loc="upper left", framealpha=0.6, facecolor="#1e293b", edgecolor="none")
 
     format_epic_figure(
         fig,

@@ -99,7 +99,7 @@ def run_kelvin_helmholtz():
     # 4-PANEL PUBLICATION DASHBOARD: KINETIC-TO-FLUID VISUALIZATION
     # -------------------------------------------------------------
     fig = plt.figure(figsize=(18, 12), dpi=140)
-    gs = GridSpec(2, 2, figure=fig, hspace=0.32, wspace=0.24, top=0.90, bottom=0.08)
+    gs = GridSpec(2, 2, figure=fig, hspace=0.34, wspace=0.28, top=0.88, bottom=0.08, left=0.07, right=0.95)
 
     gx = np.linspace(0.0, Lx, Nx)
     gy = np.linspace(0.0, Ly, Ny)
@@ -130,7 +130,7 @@ def run_kelvin_helmholtz():
         arrowsize=0.8,
     )
     cbar1 = plt.colorbar(im1, ax=ax1, fraction=0.046, pad=0.04)
-    cbar1.set_label(r"Fluid Vorticity $\omega_z = (\nabla \times \mathbf{u})_z$", color=EPIC_COLORS["text"])
+    cbar1.set_label(r"Fluid Vorticity $\omega_z = (\nabla \times \mathbf{u})_z$", color=EPIC_COLORS["text"], labelpad=8)
     ax1.set_xlabel(r"Streamwise Coordinate $x$ ($c/\omega_{pe}$)")
     ax1.set_ylabel(r"Transverse Coordinate $y$ ($c/\omega_{pe}$)")
     ax1.set_title(r"(a) Fluid Vorticity $\omega_z$ & Cat's-Eye Streamlines", fontweight="bold")
@@ -145,7 +145,7 @@ def run_kelvin_helmholtz():
         aspect="auto",
     )
     cbar2 = plt.colorbar(im2, ax=ax2, fraction=0.046, pad=0.04)
-    cbar2.set_label(r"Plasma Density $n(x, y)$", color=EPIC_COLORS["text"])
+    cbar2.set_label(r"Plasma Density $n(x, y)$", color=EPIC_COLORS["text"], labelpad=8)
     ax2.set_xlabel(r"$x$ ($c/\omega_{pe}$)")
     ax2.set_ylabel(r"$y$ ($c/\omega_{pe}$)")
     ax2.set_title(r"(b) Continuous Plasma Fluid Density & Vortex Core", fontweight="bold")
@@ -160,7 +160,7 @@ def run_kelvin_helmholtz():
         aspect="auto",
     )
     cbar3 = plt.colorbar(im3, ax=ax3, fraction=0.046, pad=0.04)
-    cbar3.set_label(r"Kinetic Temperature $T(x, y) = \frac{1}{2} \langle (\mathbf{v}-\mathbf{u})^2 \rangle$", color=EPIC_COLORS["text"])
+    cbar3.set_label(r"Kinetic Temperature $T(x, y) = \frac{1}{2} \langle (\mathbf{v}-\mathbf{u})^2 \rangle$", color=EPIC_COLORS["text"], labelpad=8)
     ax3.set_xlabel(r"$x$ ($c/\omega_{pe}$)")
     ax3.set_ylabel(r"$y$ ($c/\omega_{pe}$)")
     ax3.set_title(r"(c) Non-Thermal Kinetic Heating in Vortex Shear Layer", fontweight="bold")
@@ -179,12 +179,12 @@ def run_kelvin_helmholtz():
     ax4.set_xlabel(r"Time ($\omega_{pe} t$)")
     ax4.set_ylabel(r"Normalized Energy $\mathcal{E} / \mathcal{E}_0$")
     ax4.set_title(r"(d) Energy Conservation & Shear Dissipation", fontweight="bold")
-    ax4.legend(loc="right")
+    ax4.legend(loc="lower left")
 
     format_epic_figure(
         fig,
-        title=r"$\mathbf{ePic\ 2D\text{-}3V\ Kelvin\text{-}Helmholtz\ Instability\ Benchmark}$",
-        subtitle=r"$\text{Nonlinear Vortex Roll-up, Cat's-Eye Eddies & Kinetic-to-Fluid Moment Transformation}$",
+        title="ePic 2D-3V Kelvin-Helmholtz Instability Benchmark",
+        subtitle="Nonlinear Vortex Roll-up, Cat's-Eye Eddies & Kinetic-to-Fluid Moment Transformation",
     )
 
     output_path = "docs/images/kelvin_helmholtz_vortex.png"

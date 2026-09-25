@@ -72,7 +72,7 @@ def run_nonlinear_landau():
     e_kin = np.array(solver.history["E_kin"])
 
     fig = plt.figure(figsize=(18, 11), dpi=140)
-    gs = GridSpec(2, 2, figure=fig, hspace=0.28, wspace=0.22)
+    gs = GridSpec(2, 2, figure=fig, hspace=0.34, wspace=0.26)
 
     # -------------------------------------------------------------
     # Panel 1: O'Neil Bounce Oscillations & Nonlinear Saturation
@@ -121,7 +121,7 @@ def run_nonlinear_landau():
     ax3.set_ylabel(r"Electrostatic Potential $\phi$", color=EPIC_COLORS["emerald"])
     ax3_twin.set_ylabel(r"Electric Field $E$", color=EPIC_COLORS["gold"])
     ax3.set_title(r"(c) Nonlinear Potential Trough Confining Trapped Particles")
-    ax3.legend(handles=[p1, p2], loc="upper right")
+    ax3.legend(handles=[p1, p2], loc="upper left")
 
     # -------------------------------------------------------------
     # Panel 4: Nonlinear Wave-Particle Energy Exchange
@@ -135,7 +135,7 @@ def run_nonlinear_landau():
     ax4.set_xlabel(r"Time ($\omega_{pe} t$)")
     ax4.set_ylabel(r"Energy Exchange $\Delta \mathcal{E}$")
     ax4.set_title(r"(d) Reversible Energy Sloshing between Wave and Resonant Particles")
-    ax4.legend(loc="center right")
+    ax4.legend(loc="upper right")
 
     format_epic_figure(
         fig,

@@ -83,12 +83,17 @@ def run_3d_plasma_expansion():
     kin_e = 0.5 * m_macro * (v_mag**2)
 
     fig = plt.figure(figsize=(18, 11), dpi=140)
-    gs = GridSpec(2, 2, figure=fig, hspace=0.28, wspace=0.22)
+    gs = GridSpec(2, 2, figure=fig, hspace=0.34, wspace=0.28)
 
     # -------------------------------------------------------------
     # Panel 1: 3D Volumetric Particle Scatter
     # -------------------------------------------------------------
     ax1 = fig.add_subplot(gs[0, 0], projection="3d")
+    ax1.set_facecolor(EPIC_COLORS["bg_axes"])
+    ax1.xaxis.set_pane_color((0.05, 0.08, 0.14, 1.0))
+    ax1.yaxis.set_pane_color((0.05, 0.08, 0.14, 1.0))
+    ax1.zaxis.set_pane_color((0.05, 0.08, 0.14, 1.0))
+
     sub = slice(None, None, 12)
     sc1 = ax1.scatter(
         sp.x[sub],
@@ -107,7 +112,7 @@ def run_3d_plasma_expansion():
     ax1.set_zlabel(r"Z ($c/\omega_{pe}$)", color=EPIC_COLORS["text_muted"])
     ax1.set_title(r"(a) 3D Particle Velocity Distribution $|\mathbf{v}|$")
     cbar1 = plt.colorbar(sc1, ax=ax1, fraction=0.046, pad=0.08)
-    cbar1.set_label(r"Velocity $|\mathbf{v}| / c$", color=EPIC_COLORS["text"])
+    cbar1.set_label(r"Velocity $|\mathbf{v}| / c$", color=EPIC_COLORS["text"], labelpad=8)
 
     # -------------------------------------------------------------
     # Panel 2: 2D Midplane Slice of 3D Charge Density
@@ -129,7 +134,7 @@ def run_3d_plasma_expansion():
     ax2.set_title(r"(b) Midplane Density Slice $\rho(x, y, z=L_z/2)$")
     ax2.legend(loc="upper right")
     cbar2 = plt.colorbar(im2, ax=ax2, fraction=0.046, pad=0.04)
-    cbar2.set_label(r"Charge Density $\rho$", color=EPIC_COLORS["text"])
+    cbar2.set_label(r"Charge Density $\rho$", color=EPIC_COLORS["text"], labelpad=8)
 
     # -------------------------------------------------------------
     # Panel 3: Spherical Radial Profile rho(r) & Electric Field E_r(r)
@@ -160,7 +165,11 @@ def run_3d_plasma_expansion():
     # Panel 4: Kinetic Energy Distribution dN/dE
     # -------------------------------------------------------------
     ax4 = fig.add_subplot(gs[1, 1])
-    e_bins = np.linspace(0.0, np.percentile(kin_e, 99.5), 50)
+    max_ke = np.max(kin_e)
+    if max_ke > 1e-6:
+        e_bins = np.linspace(0.0, np.percentile(kin_e, 99.5), 50)
+    else:
+        e_bins = np.linspace(0.0, 1.0, 50)
     ax4.hist(kin_e, bins=e_bins, color=EPIC_COLORS["crimson"], alpha=0.6, edgecolor=EPIC_COLORS["gold"], lw=1.2, label="Coulomb Explosion Ions")
     ax4.set_xlabel(r"Kinetic Energy $\mathcal{E}$ ($m c^2$)")
     ax4.set_ylabel(r"Particle Count $dN/d\mathcal{E}$")

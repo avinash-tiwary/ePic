@@ -176,8 +176,8 @@ def run_asymmetric_reconnection():
     # Dark astrophysics theme with glowing cyan/crimson/gold accents
     # -------------------------------------------------------------
     plt.style.use("dark_background")
-    fig = plt.figure(figsize=(18, 12), dpi=140, facecolor="#090d16")
-    gs = GridSpec(2, 2, figure=fig, hspace=0.28, wspace=0.22)
+    fig = plt.figure(figsize=(18, 12), dpi=140, facecolor=EPIC_COLORS["bg_dark"])
+    gs = GridSpec(2, 2, figure=fig, hspace=0.34, wspace=0.28)
 
     # Panel 1: Asymmetric Magnetic Topology & Current Sheet
     ax1 = fig.add_subplot(gs[0, 0], facecolor="#090d16")
@@ -213,9 +213,9 @@ def run_asymmetric_reconnection():
     ax1.set_xlabel(r"Reconnection Inflow / Outflow $x$ ($c/\omega_{pe}$)")
     ax1.set_ylabel(r"Shear Coordinate $y$ ($c/\omega_{pe}$)")
     ax1.set_title(r"(a) Asymmetric Magnetic Topology & Current Sheet $J_z$", fontsize=13, fontweight="bold", color="#f8fafc")
-    ax1.legend(loc="upper right", framealpha=0.6, facecolor="#1e293b", edgecolor="none")
+    ax1.legend(loc="upper right", borderaxespad=0.8, framealpha=0.6, facecolor="#1e293b", edgecolor="none")
     cbar1 = plt.colorbar(im1, ax=ax1, fraction=0.046, pad=0.04)
-    cbar1.set_label(r"Out-of-Plane Current $J_z = (\nabla \times \mathbf{B})_z$", color="#f8fafc")
+    cbar1.set_label(r"Out-of-Plane Current $J_z = (\nabla \times \mathbf{B})_z$", color="#f8fafc", labelpad=8)
 
     # Panel 2: Asymmetric Hall Quadrupole Magnetic Field B_z
     ax2 = fig.add_subplot(gs[0, 1], facecolor="#090d16")
@@ -243,7 +243,7 @@ def run_asymmetric_reconnection():
     ax2.set_ylabel(r"$y$ ($c/\omega_{pe}$)")
     ax2.set_title(r"(b) Asymmetric Hall Quadrupole $B_z$ & In-Plane Electric Field $\mathbf{E}_\perp$", fontsize=13, fontweight="bold", color="#f8fafc")
     cbar2 = plt.colorbar(im2, ax=ax2, fraction=0.046, pad=0.04)
-    cbar2.set_label(r"Hall Magnetic Field $B_z / B_0$", color="#f8fafc")
+    cbar2.set_label(r"Hall Magnetic Field $B_z / B_0$", color="#f8fafc", labelpad=8)
 
     # Panel 3: Plasma Density & Outflow Jet Acceleration
     ax3 = fig.add_subplot(gs[1, 0], facecolor="#090d16")
@@ -258,7 +258,7 @@ def run_asymmetric_reconnection():
     ax3.set_ylabel(r"$y$ ($c/\omega_{pe}$)")
     ax3.set_title(r"(c) Particle Density $\rho(x, y)$ & High-Beta Sheath Stratification", fontsize=13, fontweight="bold", color="#f8fafc")
     cbar3 = plt.colorbar(im3, ax=ax3, fraction=0.046, pad=0.04)
-    cbar3.set_label(r"Electron Density $\rho(x, y)$", color="#f8fafc")
+    cbar3.set_label(r"Electron Density $\rho(x, y)$", color="#f8fafc", labelpad=8)
 
     # Panel 4: Non-Thermal Energy Spectrum (Power-Law Tail dN/dE)
     ax4 = fig.add_subplot(gs[1, 1], facecolor="#090d16")

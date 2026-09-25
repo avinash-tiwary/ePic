@@ -136,7 +136,7 @@ def run_harris_reconnection():
     kin_e = 0.5 * m_macro * v_sq
 
     fig = plt.figure(figsize=(18, 11), dpi=140)
-    gs = GridSpec(2, 2, figure=fig, hspace=0.28, wspace=0.22)
+    gs = GridSpec(2, 2, figure=fig, hspace=0.34, wspace=0.28)
 
     # -------------------------------------------------------------
     # Panel 1: Magnetic Topology & Current Sheet J_z
@@ -167,9 +167,9 @@ def run_harris_reconnection():
     ax1.set_xlabel(r"Outflow Coordinate $x$ ($c/\omega_{pe}$)")
     ax1.set_ylabel(r"Inflow Coordinate $y$ ($c/\omega_{pe}$)")
     ax1.set_title(r"(a) Magnetic Field Streamlines & Central X-Point")
-    ax1.legend(loc="upper right")
+    ax1.legend(loc="upper right", borderaxespad=0.8)
     cbar1 = plt.colorbar(im1, ax=ax1, fraction=0.046, pad=0.04)
-    cbar1.set_label(r"Current Density $J_z = (\nabla \times \mathbf{B})_z$", color=EPIC_COLORS["text"])
+    cbar1.set_label(r"Current Density $J_z = (\nabla \times \mathbf{B})_z$", color=EPIC_COLORS["text"], labelpad=8)
 
     # -------------------------------------------------------------
     # Panel 2: In-Plane Electric Field & Outflow Vectors
@@ -198,7 +198,7 @@ def run_harris_reconnection():
     ax2.set_ylabel(r"$y$ ($c/\omega_{pe}$)")
     ax2.set_title(r"(b) Self-Consistent Electric Field Magnitude $|\mathbf{E}_\perp|$")
     cbar2 = plt.colorbar(im2, ax=ax2, fraction=0.046, pad=0.04)
-    cbar2.set_label(r"Electric Field $|\mathbf{E}_\perp|$", color=EPIC_COLORS["text"])
+    cbar2.set_label(r"Electric Field $|\mathbf{E}_\perp|$", color=EPIC_COLORS["text"], labelpad=8)
 
     # -------------------------------------------------------------
     # Panel 3: Reconnecting Current Sheet Density rho(x, y)
@@ -215,7 +215,7 @@ def run_harris_reconnection():
     ax3.set_ylabel(r"$y$ ($c/\omega_{pe}$)")
     ax3.set_title(r"(c) Kinetic Plasma Number Density $\rho(x, y)$")
     cbar3 = plt.colorbar(im3, ax=ax3, fraction=0.046, pad=0.04)
-    cbar3.set_label(r"Electron Density $\rho(x, y)$", color=EPIC_COLORS["text"])
+    cbar3.set_label(r"Electron Density $\rho(x, y)$", color=EPIC_COLORS["text"], labelpad=8)
 
     # -------------------------------------------------------------
     # Panel 4: Non-Thermal Energy Spectrum dN/dE

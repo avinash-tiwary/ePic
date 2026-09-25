@@ -96,8 +96,8 @@ def run_landau_damping():
     os.makedirs("docs/images", exist_ok=True)
 
     plt.style.use("dark_background")
-    fig = plt.figure(figsize=(18, 11), dpi=140, facecolor="#090d16")
-    gs = GridSpec(2, 2, figure=fig, hspace=0.28, wspace=0.22)
+    fig = plt.figure(figsize=(18, 11), dpi=140, facecolor=EPIC_COLORS["bg_dark"])
+    gs = GridSpec(2, 2, figure=fig, hspace=0.34, wspace=0.26)
 
     # -------------------------------------------------------------
     # Panel 1: Peak Electric Field Oscillations & Theoretical Envelope
@@ -153,6 +153,7 @@ def run_landau_damping():
             ax3.plot(solver.grid_x, waveforms[rt], color=col, lw=2.0, label=rf"$t = {rt:.1f} \, \omega_{{pe}}^{{-1}}$")
 
     ax3.set_xlim(0, boxsize)
+    ax3.set_ylim(-0.24, 0.24)
     ax3.set_xlabel(r"Spatial Coordinate $x$ ($c/\omega_{pe}$)", fontsize=11, color="#f8fafc")
     ax3.set_ylabel(r"Electric Field $E(x)$", fontsize=11, color="#f8fafc")
     ax3.set_title(r"(c) Wave Packet Damping Profile in Real Space", fontsize=13, fontweight="bold", color="#f8fafc")

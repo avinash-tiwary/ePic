@@ -159,6 +159,7 @@ class PIC3DSolver:
             v_next = boris_push(sp.vel_half, E_vec, self.B_ext, sp.q, sp.m, self.dt)
 
             v_n = 0.5 * (sp.vel_half + v_next)
+            sp.vel = v_n.copy()
             e_kin_total += compute_kinetic_energy(v_n, sp.m)
 
             sp.x += v_next[:, 0] * self.dt

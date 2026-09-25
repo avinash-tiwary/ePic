@@ -80,8 +80,8 @@ def run_bump_on_tail():
     os.makedirs("docs/images", exist_ok=True)
 
     plt.style.use("dark_background")
-    fig = plt.figure(figsize=(18, 11), dpi=140, facecolor="#090d16")
-    gs = GridSpec(2, 2, figure=fig, hspace=0.28, wspace=0.22)
+    fig = plt.figure(figsize=(18, 11), dpi=140, facecolor=EPIC_COLORS["bg_dark"])
+    gs = GridSpec(2, 2, figure=fig, hspace=0.34, wspace=0.26)
 
     # -------------------------------------------------------------
     # Panel 1: Multi-Epoch Quasilinear Plateau Relaxation
@@ -103,6 +103,7 @@ def run_bump_on_tail():
     # Annotate plateau region
     ax1.axvspan(3.2, 5.5, color="#fbbf24", alpha=0.12, label="Resonant Diffusion Plateau")
     ax1.set_xlim(-3.5, 7.5)
+    ax1.set_ylim(0.0, 0.44)
     ax1.set_xlabel(r"Velocity $v_x / v_{th}$", fontsize=11, color="#f8fafc")
     ax1.set_ylabel(r"Distribution Function $f(v_x)$", fontsize=11, color="#f8fafc")
     ax1.set_title(r"(a) Quasilinear Relaxation & Plateau Formation", fontsize=13, fontweight="bold", color="#f8fafc")
@@ -126,12 +127,12 @@ def run_bump_on_tail():
     ax2.axhline(v_beam, color="#fbbf24", linestyle=":", lw=1.8, label=r"Initial Beam Velocity $v_b = 4.5\,v_{th}$")
 
     ax2.set_xlim(0, boxsize)
-    ax2.set_ylim(-3.5, 7.5)
+    ax2.set_ylim(-4.0, 8.5)
     ax2.set_xlabel(r"Spatial Position $x$ ($c/\omega_{pe}$)", fontsize=11, color="#f8fafc")
     ax2.set_ylabel(r"Velocity $v_x / v_{th}$", fontsize=11, color="#f8fafc")
     ax2.set_title(rf"(b) Kinetic Phase Space Trapping Island ($t = {t_end}\ \omega_{{pe}}^{{-1}}$)", fontsize=13, fontweight="bold", color="#f8fafc")
     ax2.grid(True, linestyle="--", alpha=0.25, color="#475569")
-    ax2.legend(loc="upper right", markerscale=6, framealpha=0.6, facecolor="#1e293b", edgecolor="none")
+    ax2.legend(loc="upper left", markerscale=6, framealpha=0.6, facecolor="#1e293b", edgecolor="none")
 
     # -------------------------------------------------------------
     # Panel 3: Wave Field Energy Growth & Quasilinear Saturation
@@ -177,7 +178,7 @@ def run_bump_on_tail():
     ax4.set_ylabel(r"Energy Conversion $\Delta \mathcal{E}$", fontsize=11, color="#f8fafc")
     ax4.set_title(r"(d) Kinetic-to-Wave Energy Transfer Dynamics", fontsize=13, fontweight="bold", color="#f8fafc")
     ax4.grid(True, linestyle="--", alpha=0.25, color="#475569")
-    ax4.legend(loc="center right", framealpha=0.6, facecolor="#1e293b", edgecolor="none")
+    ax4.legend(loc="upper left", framealpha=0.6, facecolor="#1e293b", edgecolor="none")
 
     format_epic_figure(
         fig,
